@@ -1,0 +1,2994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborative Automation Design 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            margin: 1%;
+            padding-bottom: 80px;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            padding: 12px 1%;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1%;
+        }
+
+        h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 0.75rem;
+            color: #bfdbfe;
+            margin-top: 4px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 1%;
+            margin-bottom: 1%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 80px;
+            padding: 10px 8px;
+            background: #334155;
+            border: none;
+            border-radius: 6px;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 12px 1%;
+            margin-bottom: 1%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #3b82f6;
+        }
+
+        .card h2 {
+            font-size: 0.95rem;
+            color: #60a5fa;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .card h3 {
+            font-size: 0.85rem;
+            color: #93c5fd;
+            margin: 10px 0 6px 0;
+            font-weight: 600;
+        }
+
+        .card p, .card li {
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+        }
+
+        .card ul {
+            margin-left: 18px;
+            margin-top: 6px;
+        }
+
+        .phase-tracker {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1%;
+            margin-bottom: 1%;
+        }
+
+        .phase {
+            background: #334155;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .phase.completed {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-color: #34d399;
+        }
+
+        .phase.active {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border-color: #fbbf24;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .phase-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .phase-status {
+            font-size: 0.65rem;
+            color: #e2e8f0;
+        }
+
+        .stakeholder-section {
+            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+            padding: 12px 1%;
+            border-radius: 8px;
+            margin-bottom: 1%;
+        }
+
+        .stakeholder-card {
+            background: #0f172a;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border-left: 3px solid #8b5cf6;
+        }
+
+        .stakeholder-name {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #c4b5fd;
+            margin-bottom: 4px;
+        }
+
+        .stakeholder-role {
+            font-size: 0.7rem;
+            color: #a78bfa;
+            font-style: italic;
+        }
+
+        .stakeholder-input {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            margin-top: 6px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #3b82f6 0%, #8b5cf6 100%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 16px;
+            padding-left: 12px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -21px;
+            top: 4px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #3b82f6;
+            border: 2px solid #1e293b;
+        }
+
+        .timeline-item.completed::before {
+            background: #10b981;
+        }
+
+        .timeline-date {
+            font-size: 0.7rem;
+            color: #60a5fa;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .timeline-content {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+        }
+
+        .decision-log {
+            background: #0f172a;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border-left: 3px solid #f59e0b;
+        }
+
+        .decision-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 4px;
+        }
+
+        .decision-outcome {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            margin-bottom: 4px;
+        }
+
+        .decision-rationale {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .tool-simulator {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 12px 1%;
+            border-radius: 8px;
+            margin-bottom: 1%;
+        }
+
+        .sim-controls {
+            display: flex;
+            gap: 1%;
+            margin-bottom: 12px;
+        }
+
+        .sim-btn {
+            flex: 1;
+            padding: 10px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border: none;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sim-btn:active {
+            transform: scale(0.98);
+        }
+
+        .sim-output {
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 6px;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+            color: #10b981;
+            border: 1px solid #334155;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1%;
+            margin-bottom: 1%;
+        }
+
+        .metric {
+            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #60a5fa;
+            margin-bottom: 4px;
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+
+        .progress-bar {
+            background: #334155;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .highlight {
+            background: rgba(59, 130, 246, 0.2);
+            padding: 8px;
+            border-radius: 4px;
+            border-left: 2px solid #3b82f6;
+            margin: 8px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            margin: 2px;
+        }
+
+        .badge-blue { background: #3b82f6; color: #ffffff; }
+        .badge-green { background: #10b981; color: #ffffff; }
+        .badge-orange { background: #f59e0b; color: #ffffff; }
+        .badge-purple { background: #8b5cf6; color: #ffffff; }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1e293b;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 1%;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-item {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.7rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: #60a5fa;
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚙️ Collaborative Automation Design</h1>
+        <div class="subtitle">End-to-End: Concept → Prototype | 2026</div>
+    </div>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab(0)">Overview</button>
+        <button class="tab-btn" onclick="switchTab(1)">Process</button>
+        <button class="tab-btn" onclick="switchTab(2)">Stakeholders</button>
+        <button class="tab-btn" onclick="switchTab(3)">Timeline</button>
+        <button class="tab-btn" onclick="switchTab(4)">Simulator</button>
+        <button class="tab-btn" onclick="switchTab(5)">Best Practices</button>
+        <button class="tab-btn" onclick="switchTab(6)">Templates</button>
+        <button class="tab-btn" onclick="switchTab(7)">Tools</button>
+        <button class="tab-btn" onclick="switchTab(8)">Metrics</button>
+        <button class="tab-btn" onclick="switchTab(9)">Case Studies</button>
+        <button class="tab-btn" onclick="switchTab(10)">Onboarding</button>
+    </div>
+
+    <!-- Overview Tab -->
+    <div class="tab-content active" id="tab-0">
+        <div class="card">
+            <h2>🎯 Collaborative Automation Design</h2>
+            <p>A comprehensive approach to building automation tools through continuous stakeholder collaboration, joint decision-making, and iterative design from initial concept to working prototype.</p>
+        </div>
+
+        <div class="phase-tracker">
+            <div class="phase completed">
+                <div class="phase-title">Discovery</div>
+                <div class="phase-status">✓ Complete</div>
+            </div>
+            <div class="phase completed">
+                <div class="phase-title">Design</div>
+                <div class="phase-status">✓ Complete</div>
+            </div>
+            <div class="phase active">
+                <div class="phase-title">Development</div>
+                <div class="phase-status">⚡ In Progress</div>
+            </div>
+            <div class="phase">
+                <div class="phase-title">Testing</div>
+                <div class="phase-status">⏳ Pending</div>
+            </div>
+            <div class="phase">
+                <div class="phase-title">Deployment</div>
+                <div class="phase-status">⏳ Pending</div>
+            </div>
+        </div>
+
+        <div class="metric-grid">
+            <div class="metric">
+                <div class="metric-value">23</div>
+                <div class="metric-label">Collaborative Sessions</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">87%</div>
+                <div class="metric-label">Stakeholder Alignment</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">15</div>
+                <div class="metric-label">Iterations Completed</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">42</div>
+                <div class="metric-label">Design Decisions</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔑 Core Principles</h2>
+            <div class="highlight">
+                <h3>Daily Collaboration</h3>
+                <p>Continuous engagement with stakeholders through daily standups, design reviews, and feedback sessions to ensure alignment and rapid iteration.</p>
+            </div>
+            <div class="highlight">
+                <h3>Joint Decision-Making</h3>
+                <p>All critical decisions are made collaboratively, weighing technical feasibility, business value, and user needs together.</p>
+            </div>
+            <div class="highlight">
+                <h3>Iterative Design</h3>
+                <p>Progressive refinement through rapid prototyping, testing, and feedback loops—from wireframes to functional tools.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Current Project Status</h2>
+            <p><strong>Project:</strong> Inventory Management Automation Tool</p>
+            <p><strong>Sprint:</strong> 3 of 5</p>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 68%;">68%</div>
+            </div>
+            <p style="margin-top: 8px;">
+                <span class="badge badge-green">API Integration ✓</span>
+                <span class="badge badge-green">UI Design ✓</span>
+                <span class="badge badge-orange">Testing 🔄</span>
+                <span class="badge badge-blue">Deployment 📅</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Process Tab -->
+    <div class="tab-content" id="tab-1">
+        <div class="card">
+            <h2>🔄 End-to-End Process</h2>
+            <h3>1. Concept Phase</h3>
+            <ul>
+                <li><strong>Stakeholder Workshop:</strong> Identify pain points, goals, and success metrics</li>
+                <li><strong>Requirements Gathering:</strong> Document functional and non-functional needs</li>
+                <li><strong>Feasibility Analysis:</strong> Technical assessment and resource planning</li>
+                <li><strong>Initial Alignment:</strong> Ensure all parties agree on vision and scope</li>
+            </ul>
+
+            <h3>2. Design Phase</h3>
+            <ul>
+                <li><strong>Collaborative Sketching:</strong> Low-fidelity wireframes with stakeholder input</li>
+                <li><strong>User Flow Mapping:</strong> Define end-to-end user journeys</li>
+                <li><strong>Interactive Mockups:</strong> High-fidelity prototypes for validation</li>
+                <li><strong>Design Reviews:</strong> Weekly sessions to refine and iterate</li>
+            </ul>
+
+            <h3>3. Development Phase</h3>
+            <ul>
+                <li><strong>Agile Sprints:</strong> 2-week cycles with daily standups</li>
+                <li><strong>Pair Programming:</strong> Developer + stakeholder collaboration</li>
+                <li><strong>Continuous Integration:</strong> Automated testing and deployment</li>
+                <li><strong>Demo Sessions:</strong> End-of-sprint showcases for feedback</li>
+            </ul>
+
+            <h3>4. Testing & Iteration</h3>
+            <ul>
+                <li><strong>User Acceptance Testing:</strong> Real-world scenario validation</li>
+                <li><strong>Feedback Integration:</strong> Rapid response to stakeholder input</li>
+                <li><strong>Performance Optimization:</strong> Technical refinements</li>
+                <li><strong>Accessibility Compliance:</strong> Ensuring inclusive design</li>
+            </ul>
+
+            <h3>5. Deployment & Support</h3>
+            <ul>
+                <li><strong>Staged Rollout:</strong> Gradual deployment to minimize risk</li>
+                <li><strong>Training Sessions:</strong> User onboarding and documentation</li>
+                <li><strong>Monitoring Setup:</strong> Analytics and error tracking</li>
+                <li><strong>Ongoing Collaboration:</strong> Post-launch optimization cycles</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🎨 Design Iteration Example</h2>
+            <div class="timeline">
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Week 1</div>
+                    <div class="timeline-content">Initial sketch: Single-page dashboard</div>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Week 2</div>
+                    <div class="timeline-content">Stakeholder feedback: Need filtering capabilities</div>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Week 3</div>
+                    <div class="timeline-content">Iteration 2: Added advanced filters and search</div>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Week 4</div>
+                    <div class="timeline-content">User testing: Simplified navigation requested</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Week 5</div>
+                    <div class="timeline-content">Final design: Tabbed interface with smart defaults</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stakeholders Tab -->
+    <div class="tab-content" id="tab-2">
+        <div class="stakeholder-section">
+            <h2 style="color: #c4b5fd; font-size: 0.95rem; margin-bottom: 10px;">👥 Stakeholder Collaboration</h2>
+            
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Sarah Chen - Product Owner</div>
+                <div class="stakeholder-role">Business Strategy & Vision</div>
+                <div class="stakeholder-input"><strong>Latest Input:</strong> "We need real-time inventory alerts. Users reported 3-hour delays causing stockouts."</div>
+            </div>
+
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Marcus Rodriguez - Operations Manager</div>
+                <div class="stakeholder-role">End User Representative</div>
+                <div class="stakeholder-input"><strong>Latest Input:</strong> "Mobile access is critical. Our warehouse team needs to update inventory on the floor."</div>
+            </div>
+
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Dr. Aisha Patel - Technical Lead</div>
+                <div class="stakeholder-role">Engineering & Architecture</div>
+                <div class="stakeholder-input"><strong>Latest Input:</strong> "Real-time sync is feasible with WebSocket implementation. I recommend Redis for caching."</div>
+            </div>
+
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">James Liu - UX Designer</div>
+                <div class="stakeholder-role">User Experience & Interface</div>
+                <div class="stakeholder-input"><strong>Latest Input:</strong> "Based on usability tests, users prefer a card-based layout over tables for mobile."</div>
+            </div>
+
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Elena Volkov - QA Specialist</div>
+                <div class="stakeholder-role">Quality Assurance & Testing</div>
+                <div class="stakeholder-input"><strong>Latest Input:</strong> "We need to test offline functionality. Warehouse WiFi is unreliable."</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🤝 Collaboration Methods</h2>
+            <h3>Daily Rituals</h3>
+            <ul>
+                <li><strong>Morning Standup (15 min):</strong> Progress updates, blockers, and alignment</li>
+                <li><strong>Design Desk Check (30 min):</strong> Quick UX reviews with stakeholders</li>
+                <li><strong>End-of-Day Sync (10 min):</strong> Review decisions and plan next steps</li>
+            </ul>
+
+            <h3>Weekly Ceremonies</h3>
+            <ul>
+                <li><strong>Sprint Planning:</strong> Collaborative backlog refinement and prioritization</li>
+                <li><strong>Design Review:</strong> Deep-dive on UI/UX with all stakeholders</li>
+                <li><strong>Demo & Retrospective:</strong> Show progress and improve processes</li>
+            </ul>
+
+            <h3>Tools & Channels</h3>
+            <ul>
+                <li><strong>Figma:</strong> Real-time collaborative design</li>
+                <li><strong>Slack Channels:</strong> Async communication and quick decisions</li>
+                <li><strong>Miro Board:</strong> Shared brainstorming and mapping</li>
+                <li><strong>GitHub:</strong> Code reviews with stakeholder visibility</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Timeline Tab -->
+    <div class="tab-content" id="tab-3">
+        <div class="card">
+            <h2>📅 Project Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Jan 6, 2026</div>
+                    <div class="timeline-content"><strong>Kickoff Workshop:</strong> Stakeholders aligned on pain points—manual inventory tracking causing 15% stock discrepancies</div>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Jan 8-10, 2026</div>
+                    <div class="timeline-content"><strong>Requirements Session:</strong> Documented 32 user stories with priority ranking</div>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Jan 13, 2026</div>
+                    <div class="timeline-content"><strong>Design Sprint 1:</strong> Created initial wireframes, validated with 3 end users</div>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Jan 20, 2026</div>
+                    <div class="timeline-content"><strong>Decision: Mobile-First:</strong> Based on user survey showing 78% mobile usage</div>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Jan 27, 2026</div>
+                    <div class="timeline-content"><strong>Sprint 1 Demo:</strong> Basic CRUD operations, positive feedback on navigation</div>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Feb 3, 2026</div>
+                    <div class="timeline-content"><strong>Iteration:</strong> Added barcode scanning after warehouse visit revealed need</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Feb 10, 2026</div>
+                    <div class="timeline-content"><strong>Sprint 3:</strong> Implementing real-time sync and offline mode</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Feb 17, 2026</div>
+                    <div class="timeline-content"><strong>UAT Phase:</strong> 10 users testing in production-like environment</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Feb 24, 2026</div>
+                    <div class="timeline-content"><strong>Planned Launch:</strong> Staged rollout to 50% of warehouse staff</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚖️ Joint Decision Log</h2>
+            <div class="decision-log">
+                <div class="decision-title">Decision #1: Technology Stack</div>
+                <div class="decision-outcome"><strong>Outcome:</strong> React Native + Firebase</div>
+                <div class="decision-rationale"><strong>Rationale:</strong> Enables rapid prototyping, cross-platform support, and real-time capabilities. Technical lead confirmed 2-week faster delivery vs. native apps.</div>
+            </div>
+
+            <div class="decision-log">
+                <div class="decision-title">Decision #2: Offline Capability</div>
+                <div class="decision-outcome"><strong>Outcome:</strong> Full offline mode with sync queue</div>
+                <div class="decision-rationale"><strong>Rationale:</strong> Operations manager demonstrated WiFi dead zones in warehouse. QA confirmed business-critical need.</div>
+            </div>
+
+            <div class="decision-log">
+                <div class="decision-title">Decision #3: Navigation Pattern</div>
+                <div class="decision-outcome"><strong>Outcome:</strong> Bottom tab navigation over hamburger menu</div>
+                <div class="decision-rationale"><strong>Rationale:</strong> UX testing showed 40% faster task completion with tabs. Users cited "can't find things" in menu version.</div>
+            </div>
+
+            <div class="decision-log">
+                <div class="decision-title">Decision #4: Alert Threshold</div>
+                <div class="decision-outcome"><strong>Outcome:</strong> Configurable per item vs. blanket 20% threshold</div>
+                <div class="decision-rationale"><strong>Rationale:</strong> Product owner noted different items have different criticality. Compromise: smart defaults + customization.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Simulator Tab -->
+    <div class="tab-content" id="tab-4">
+        <div class="tool-simulator">
+            <h2 style="color: #60a5fa; font-size: 0.95rem; margin-bottom: 10px;">🛠️ Prototype Simulator</h2>
+            <p style="font-size: 0.75rem; color: #cbd5e1; margin-bottom: 12px;">Experience the collaborative automation tool in action</p>
+            
+            <div class="sim-controls">
+                <button class="sim-btn" onclick="runSimulation('scan')">📷 Scan Item</button>
+                <button class="sim-btn" onclick="runSimulation('update')">📝 Update Stock</button>
+                <button class="sim-btn" onclick="runSimulation('alert')">🔔 Check Alerts</button>
+            </div>
+            
+            <div class="sim-output" id="sim-output">
+                <div style="color: #94a3b8;">Ready to simulate. Click a button above to test functionality.</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Feature Roadmap</h2>
+            <h3>✅ Completed Features</h3>
+            <ul>
+                <li>Item cataloging and search</li>
+                <li>Barcode scanning integration</li>
+                <li>Stock level tracking</li>
+                <li>Mobile-responsive interface</li>
+                <li>User authentication and roles</li>
+            </ul>
+
+            <h3>🔄 In Progress</h3>
+            <ul>
+                <li>Real-time inventory sync (68% complete)</li>
+                <li>Offline mode with sync queue (45% complete)</li>
+                <li>Low-stock alerts (80% complete)</li>
+                <li>Analytics dashboard (30% complete)</li>
+            </ul>
+
+            <h3>📋 Upcoming</h3>
+            <ul>
+                <li>Predictive reordering AI</li>
+                <li>Supplier integration API</li>
+                <li>Multi-warehouse management</li>
+                <li>Advanced reporting suite</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📈 Success Metrics</h2>
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value">-85%</div>
+                    <div class="metric-label">Stock Discrepancies</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">4.2hrs</div>
+                    <div class="metric-label">Time Saved Daily</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">94%</div>
+                    <div class="metric-label">User Satisfaction</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">$12K</div>
+                    <div class="metric-label">Monthly Savings</div>
+                </div>
+            </div>
+            <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 8px;">*Projected based on pilot program results</p>
+        </div>
+    </div>
+
+    <!-- Best Practices Tab -->
+    <div class="tab-content" id="tab-5">
+        <div class="card">
+            <h2>✨ Best Practices Guide</h2>
+            <p>Proven strategies for successful collaborative automation design based on real-world implementation experience.</p>
+        </div>
+
+        <div class="card">
+            <h2>🚫 Common Pitfalls & Solutions</h2>
+            
+            <div class="highlight">
+                <h3>Pitfall #1: Stakeholder Misalignment</h3>
+                <p><strong>Problem:</strong> Different stakeholders have conflicting visions of success</p>
+                <p><strong>Solution:</strong></p>
+                <ul>
+                    <li>Start with a shared vision workshop in week 1</li>
+                    <li>Create a one-page "North Star" document everyone signs off on</li>
+                    <li>Revisit and validate alignment every 2 weeks</li>
+                    <li>Use "5 Whys" technique to uncover root goals</li>
+                </ul>
+                <p><span class="badge badge-orange">Impact: High</span> <span class="badge badge-green">Effort: Low</span></p>
+            </div>
+
+            <div class="highlight">
+                <h3>Pitfall #2: Over-Engineering Early</h3>
+                <p><strong>Problem:</strong> Team builds complex features before validating core assumptions</p>
+                <p><strong>Solution:</strong></p>
+                <ul>
+                    <li>Follow the "crawl, walk, run" approach</li>
+                    <li>Build clickable prototypes before writing code</li>
+                    <li>Use the 80/20 rule: focus on 20% of features that deliver 80% of value</li>
+                    <li>Set a "prototype in 1 week" challenge</li>
+                </ul>
+                <p><span class="badge badge-orange">Impact: High</span> <span class="badge badge-orange">Effort: Medium</span></p>
+            </div>
+
+            <div class="highlight">
+                <h3>Pitfall #3: Feedback Black Hole</h3>
+                <p><strong>Problem:</strong> Stakeholders give feedback but never see it implemented</p>
+                <p><strong>Solution:</strong></p>
+                <ul>
+                    <li>Create a public feedback tracking board (Trello/Notion)</li>
+                    <li>Categorize: "Doing Now", "Next Sprint", "Parked", "Won't Do"</li>
+                    <li>Explain the "Won't Do" decisions transparently</li>
+                    <li>Send weekly "You asked, we built" updates</li>
+                </ul>
+                <p><span class="badge badge-orange">Impact: High</span> <span class="badge badge-green">Effort: Low</span></p>
+            </div>
+
+            <div class="highlight">
+                <h3>Pitfall #4: Meeting Overload</h3>
+                <p><strong>Problem:</strong> Too many meetings slow down actual building</p>
+                <p><strong>Solution:</strong></p>
+                <ul>
+                    <li>Use async updates for status (Loom videos, Slack updates)</li>
+                    <li>Time-box all meetings (15min standup, 45min max reviews)</li>
+                    <li>Require pre-read materials sent 24hrs before meetings</li>
+                    <li>Implement "no meeting Thursdays" for deep work</li>
+                </ul>
+                <p><span class="badge badge-blue">Impact: Medium</span> <span class="badge badge-green">Effort: Low</span></p>
+            </div>
+
+            <div class="highlight">
+                <h3>Pitfall #5: Scope Creep</h3>
+                <p><strong>Problem:</strong> "Just one more feature" syndrome derails timelines</p>
+                <p><strong>Solution:</strong></p>
+                <ul>
+                    <li>Maintain a strict "scope buffer" of 15% for new requests</li>
+                    <li>Use "yes, and" responses: "Yes, we can add that, and it will push launch by 2 weeks"</li>
+                    <li>Create a "v2 backlog" for good ideas that don't fit v1</li>
+                    <li>Make stakeholders choose: add feature OR keep timeline</li>
+                </ul>
+                <p><span class="badge badge-orange">Impact: High</span> <span class="badge badge-orange">Effort: Medium</span></p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Effective Meeting Facilitation</h2>
+            
+            <h3>The Perfect Daily Standup (15 minutes)</h3>
+            <ul>
+                <li><strong>Structure:</strong> What I did + What I'm doing + Blockers</li>
+                <li><strong>Rule:</strong> No problem-solving in standup—park issues for after</li>
+                <li><strong>Tip:</strong> Use a timer. When it beeps, meeting ends even if unfinished</li>
+                <li><strong>Engagement:</strong> Rotate facilitator daily to keep energy high</li>
+            </ul>
+
+            <h3>Design Review Best Practices (45 minutes)</h3>
+            <ul>
+                <li><strong>Pre-work:</strong> Share designs 24 hours before, with specific questions</li>
+                <li><strong>Opening (5min):</strong> Designer presents context and goals</li>
+                <li><strong>Silent Review (10min):</strong> Everyone reviews quietly and adds sticky notes</li>
+                <li><strong>Discussion (25min):</strong> Group similar feedback, prioritize top 3 issues</li>
+                <li><strong>Closing (5min):</strong> Designer summarizes action items</li>
+            </ul>
+
+            <h3>Conflict Resolution Framework</h3>
+            <ul>
+                <li><strong>Step 1:</strong> Separate positions from interests ("I want X" vs "I need Y because...")</li>
+                <li><strong>Step 2:</strong> Find shared goals ("We both want happy users")</li>
+                <li><strong>Step 3:</strong> Generate options together ("What if we tried...")</li>
+                <li><strong>Step 4:</strong> Use data to decide ("Let's A/B test both approaches")</li>
+                <li><strong>Step 5:</strong> Document decision and reasoning for future reference</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>💡 Remote vs In-Person Collaboration</h2>
+            
+            <h3>Remote Collaboration Tips</h3>
+            <div class="highlight">
+                <p><strong>✓ Do:</strong></p>
+                <ul>
+                    <li>Use cameras on for all collaborative sessions</li>
+                    <li>Create virtual "water cooler" Slack channels</li>
+                    <li>Record all demos for async viewing</li>
+                    <li>Use digital whiteboards (Miro, FigJam) for real-time collaboration</li>
+                    <li>Schedule "virtual coffee chats" for relationship building</li>
+                </ul>
+            </div>
+            <div class="highlight">
+                <p><strong>✗ Avoid:</strong></p>
+                <ul>
+                    <li>Back-to-back video calls without breaks</li>
+                    <li>Expecting instant responses in async channels</li>
+                    <li>Making important decisions without written documentation</li>
+                    <li>Assuming silence means agreement</li>
+                </ul>
+            </div>
+
+            <h3>In-Person Collaboration Tips</h3>
+            <div class="highlight">
+                <p><strong>✓ Do:</strong></p>
+                <ul>
+                    <li>Use physical war rooms with always-on displays of progress</li>
+                    <li>Conduct design sprints and workshops in person when possible</li>
+                    <li>Create space for informal conversations (lunch, coffee breaks)</li>
+                    <li>Use sticky notes and whiteboards for brainstorming</li>
+                    <li>Document in-person decisions immediately for remote team members</li>
+                </ul>
+            </div>
+            <div class="highlight">
+                <p><strong>✗ Avoid:</strong></p>
+                <ul>
+                    <li>Leaving remote team members out of important hallway conversations</li>
+                    <li>Forgetting to share photos of whiteboard sessions</li>
+                    <li>Creating "in-person only" culture that excludes others</li>
+                </ul>
+            </div>
+
+            <h3>Hybrid Best Practices</h3>
+            <ul>
+                <li><strong>Default to Remote:</strong> If anyone is remote, everyone joins from their own device</li>
+                <li><strong>Rotate Locations:</strong> Alternate between office and remote-friendly timezones</li>
+                <li><strong>Equality Principle:</strong> Same tools and access for everyone, regardless of location</li>
+                <li><strong>Over-communicate:</strong> When in doubt, share more rather than less</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🎓 Advanced Collaboration Techniques</h2>
+            
+            <h3>The "Silent Brainstorm" Method</h3>
+            <p>Generates 3x more ideas than traditional brainstorming:</p>
+            <ul>
+                <li>1. Everyone writes ideas silently for 10 minutes</li>
+                <li>2. Pass papers clockwise, read and build on others' ideas (5 min)</li>
+                <li>3. Repeat rotation 3-4 times</li>
+                <li>4. Group similar ideas together</li>
+                <li>5. Vote on top 3 as a group</li>
+            </ul>
+
+            <h3>The "Pre-Mortem" Technique</h3>
+            <p>Identify risks before they become problems:</p>
+            <ul>
+                <li>Imagine it's 6 months from now and the project failed</li>
+                <li>Each person writes down why they think it failed</li>
+                <li>Share all failure scenarios</li>
+                <li>Create mitigation plans for top 5 risks</li>
+                <li>Review monthly to see if predictions were accurate</li>
+            </ul>
+
+            <h3>The "Yes, And" Rule</h3>
+            <p>Build on ideas instead of shutting them down:</p>
+            <ul>
+                <li>Replace "Yes, but..." with "Yes, and..."</li>
+                <li>Example: "Yes, and we could also add X to make it even better"</li>
+                <li>Postpone critique to a designated time</li>
+                <li>Creates psychological safety for wild ideas</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📊 Measuring Collaboration Health</h2>
+            
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value">8.4</div>
+                    <div class="metric-label">Team Satisfaction (1-10)</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">92%</div>
+                    <div class="metric-label">Meeting Attendance</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">2.3 days</div>
+                    <div class="metric-label">Avg Decision Time</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">15</div>
+                    <div class="metric-label">Active Contributors</div>
+                </div>
+            </div>
+
+            <h3>Key Indicators to Track</h3>
+            <ul>
+                <li><strong>Response Time:</strong> How quickly do stakeholders respond to requests?</li>
+                <li><strong>Feedback Quality:</strong> Are comments actionable and specific?</li>
+                <li><strong>Decision Velocity:</strong> Days from discussion to decision</li>
+                <li><strong>Rework Rate:</strong> % of work redone due to miscommunication</li>
+                <li><strong>Stakeholder Engagement:</strong> Active participation in sessions</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Communication Templates Tab -->
+    <div class="tab-content" id="tab-6">
+        <div class="card">
+            <h2>📝 Communication Templates</h2>
+            <p>Ready-to-use templates for effective stakeholder communication throughout the design process.</p>
+        </div>
+
+        <div class="card">
+            <h2>🎤 Stakeholder Interview Template</h2>
+            <div class="highlight">
+                <h3>Opening (5 minutes)</h3>
+                <p><strong>Introduction:</strong></p>
+                <ul>
+                    <li>"Thank you for taking time to speak with me today."</li>
+                    <li>"I'm here to understand your needs for [project name]."</li>
+                    <li>"This will take about 30 minutes. I'll be taking notes."</li>
+                    <li>"Everything you share will help us build the right solution."</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Discovery Questions (15 minutes)</h3>
+                <p><strong>Current State:</strong></p>
+                <ul>
+                    <li>Walk me through your current process for [task]?</li>
+                    <li>What tools do you use today?</li>
+                    <li>How much time does this take you per day/week?</li>
+                    <li>What's the most frustrating part of your current workflow?</li>
+                </ul>
+                <p><strong>Pain Points:</strong></p>
+                <ul>
+                    <li>What keeps you up at night about this process?</li>
+                    <li>Can you tell me about a time when things went wrong?</li>
+                    <li>If you could wave a magic wand, what would change?</li>
+                    <li>What workarounds have you created?</li>
+                </ul>
+                <p><strong>Success Metrics:</strong></p>
+                <ul>
+                    <li>How would you measure success for this project?</li>
+                    <li>What does "done" look like to you?</li>
+                    <li>What would make you a hero to your team?</li>
+                    <li>What's the minimum improvement that would be valuable?</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Validation Questions (8 minutes)</h3>
+                <ul>
+                    <li>"I heard you say [summarize]. Is that accurate?"</li>
+                    <li>"It sounds like [X] is more important than [Y]. True?"</li>
+                    <li>"If we could only fix one thing, what should it be?"</li>
+                    <li>"Who else should I talk to about this?"</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Closing (2 minutes)</h3>
+                <ul>
+                    <li>"Is there anything I didn't ask that I should have?"</li>
+                    <li>"Can I follow up if I have clarifying questions?"</li>
+                    <li>"I'll send you my notes within 48 hours for validation."</li>
+                    <li>"Thank you for your insights—this was incredibly valuable."</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📅 Daily Standup Agenda Template</h2>
+            <div class="decision-log">
+                <div class="decision-title">Standup Agenda - [Date]</div>
+                <div class="decision-outcome">
+                    <p><strong>Duration:</strong> 15 minutes max</p>
+                    <p><strong>Attendees:</strong> [List core team members]</p>
+                    <p><strong>Format:</strong> Round-robin, 2 minutes per person</p>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>Each Person Shares:</h3>
+                <p><strong>✅ Yesterday's Accomplishments</strong></p>
+                <ul>
+                    <li>"I completed [specific task]"</li>
+                    <li>"I made progress on [feature/component]"</li>
+                    <li>"I learned [insight from user feedback]"</li>
+                </ul>
+
+                <p><strong>🎯 Today's Focus</strong></p>
+                <ul>
+                    <li>"I'm working on [specific task]"</li>
+                    <li>"My goal is to [measurable outcome]"</li>
+                    <li>"I'll collaborate with [person] on [task]"</li>
+                </ul>
+
+                <p><strong>🚧 Blockers</strong></p>
+                <ul>
+                    <li>"I need [resource/decision] from [person]"</li>
+                    <li>"I'm stuck on [technical/design challenge]"</li>
+                    <li>"I'm waiting for [dependency]"</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Parking Lot Topics</h3>
+                <p>Issues requiring >2 minutes discussion:</p>
+                <ul>
+                    <li>[Topic 1] - Owners: [Names] - Time: 15 min</li>
+                    <li>[Topic 2] - Owners: [Names] - Time: 30 min</li>
+                </ul>
+                <p><em>Schedule these immediately after standup with only required attendees.</em></p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎨 Design Review Request Template</h2>
+            <div class="stakeholder-section">
+                <div class="stakeholder-card">
+                    <div class="stakeholder-name">Subject: Design Review Request - [Feature Name]</div>
+                    <div class="stakeholder-input">
+                        <p><strong>Hi Team,</strong></p>
+                        <p>I'm requesting a design review for [Feature Name] on [Date] at [Time]. Please block 45 minutes.</p>
+                        
+                        <p><strong>📋 Pre-Read (Required):</strong></p>
+                        <ul>
+                            <li>Figma Link: [URL]</li>
+                            <li>User Stories: [Link]</li>
+                            <li>Previous Feedback Summary: [Link]</li>
+                        </ul>
+
+                        <p><strong>🎯 Goals for This Review:</strong></p>
+                        <ul>
+                            <li>Validate navigation flow</li>
+                            <li>Review mobile responsiveness</li>
+                            <li>Confirm accessibility compliance</li>
+                        </ul>
+
+                        <p><strong>❓ Specific Questions:</strong></p>
+                        <ul>
+                            <li>Does the checkout flow feel intuitive?</li>
+                            <li>Is the color contrast sufficient for readability?</li>
+                            <li>Should we show payment methods earlier?</li>
+                        </ul>
+
+                        <p><strong>⏰ Agenda:</strong></p>
+                        <ul>
+                            <li>0-5 min: Context setting</li>
+                            <li>5-15 min: Silent review</li>
+                            <li>15-40 min: Discussion</li>
+                            <li>40-45 min: Action items</li>
+                        </ul>
+
+                        <p><strong>✅ Action Needed from You:</strong></p>
+                        <ul>
+                            <li>Review designs before meeting</li>
+                            <li>Add comments directly in Figma</li>
+                            <li>Come prepared with 2-3 top concerns</li>
+                        </ul>
+
+                        <p>Looking forward to your insights!</p>
+                        <p>[Your Name]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Sprint Retrospective Format</h2>
+            <div class="timeline">
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Opening (5 min)</div>
+                    <div class="timeline-content">Review sprint goals and metrics. Set positive, learning-focused tone.</div>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-date">What Went Well (10 min)</div>
+                    <div class="timeline-content">Everyone shares wins on sticky notes. Group themes. Celebrate!</div>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-date">What Didn't Go Well (10 min)</div>
+                    <div class="timeline-content">Share challenges without blame. Focus on processes, not people.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Root Cause Analysis (10 min)</div>
+                    <div class="timeline-content">Use "5 Whys" on top 3 issues to identify real problems.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Action Items (10 min)</div>
+                    <div class="timeline-content">Create specific, owned actions. Max 3 experiments for next sprint.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Closing (5 min)</div>
+                    <div class="timeline-content">Recap actions, assign owners, schedule follow-up.</div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>Sample Questions:</h3>
+                <ul>
+                    <li>What surprised us this sprint?</li>
+                    <li>What slowed us down?</li>
+                    <li>What should we stop/start/continue doing?</li>
+                    <li>If we could redo this sprint, what would we change?</li>
+                    <li>What did we learn about our users?</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔔 Feedback Request Template</h2>
+            <div class="decision-log">
+                <div class="decision-title">Quick Feedback Needed - [Topic]</div>
+                <div class="decision-outcome">
+                    <p><strong>Hi [Name],</strong></p>
+                    <p>I need your input on [specific item] by [date/time].</p>
+                    
+                    <p><strong>Context:</strong> [2-3 sentences explaining situation]</p>
+                    
+                    <p><strong>What I Need:</strong></p>
+                    <ul>
+                        <li>[Specific question 1]</li>
+                        <li>[Specific question 2]</li>
+                        <li>[Specific question 3]</li>
+                    </ul>
+
+                    <p><strong>Review Link:</strong> [URL to design/doc/prototype]</p>
+                    
+                    <p><strong>Response Format:</strong></p>
+                    <ul>
+                        <li>👍 Approve as-is</li>
+                        <li>💭 Approve with minor comments</li>
+                        <li>⚠️ Major concerns - needs discussion</li>
+                    </ul>
+
+                    <p><strong>Deadline:</strong> [Date] - [Reason for urgency]</p>
+                    
+                    <p>Thanks!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📢 Decision Documentation Template</h2>
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Decision Record #[Number]</div>
+                <div class="stakeholder-role">[Feature/Component Name]</div>
+                <div class="stakeholder-input">
+                    <p><strong>Date:</strong> [YYYY-MM-DD]</p>
+                    <p><strong>Decision Makers:</strong> [Names and roles]</p>
+                    
+                    <p><strong>🎯 Decision:</strong></p>
+                    <p>[Clear, one-sentence statement of what was decided]</p>
+                    
+                    <p><strong>📊 Context:</strong></p>
+                    <p>[What problem were we trying to solve? What constraints existed?]</p>
+                    
+                    <p><strong>⚖️ Options Considered:</strong></p>
+                    <ul>
+                        <li><strong>Option A:</strong> [Description] - Pros: [X] - Cons: [Y]</li>
+                        <li><strong>Option B:</strong> [Description] - Pros: [X] - Cons: [Y]</li>
+                        <li><strong>Option C:</strong> [Description] - Pros: [X] - Cons: [Y]</li>
+                    </ul>
+
+                    <p><strong>💡 Rationale:</strong></p>
+                    <p>[Why did we choose this option? What data informed our decision?]</p>
+                    
+                    <p><strong>📈 Success Criteria:</strong></p>
+                    <p>[How will we know if this decision was right?]</p>
+                    
+                    <p><strong>🔄 Review Date:</strong></p>
+                    <p>[When will we revisit this decision?]</p>
+                    
+                    <p><strong>⚡ Action Items:</strong></p>
+                    <ul>
+                        <li>[Task 1] - Owner: [Name] - Due: [Date]</li>
+                        <li>[Task 2] - Owner: [Name] - Due: [Date]</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tools & Tech Stack Tab -->
+    <div class="tab-content" id="tab-7">
+        <div class="card">
+            <h2>🛠️ Tools & Tech Stack Guide</h2>
+            <p>Comprehensive guide to collaboration tools, development frameworks, and integration best practices for automation design projects.</p>
+        </div>
+
+        <div class="card">
+            <h2>💬 Collaboration Tools Comparison</h2>
+            
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Real-Time Design Collaboration</div>
+                <div class="stakeholder-input">
+                    <p><strong>Figma</strong> <span class="badge badge-green">Recommended</span></p>
+                    <ul>
+                        <li>✅ Real-time multiplayer editing</li>
+                        <li>✅ Component libraries and design systems</li>
+                        <li>✅ Developer handoff with code snippets</li>
+                        <li>✅ Unlimited free viewers</li>
+                        <li>💰 $12/editor/month (Professional)</li>
+                    </ul>
+                    
+                    <p><strong>Adobe XD</strong></p>
+                    <ul>
+                        <li>✅ Good for Adobe Creative Cloud users</li>
+                        <li>✅ Voice prototyping features</li>
+                        <li>⚠️ Limited real-time collaboration</li>
+                        <li>💰 $9.99/month (Single App)</li>
+                    </ul>
+
+                    <p><strong>Sketch + Abstract</strong></p>
+                    <ul>
+                        <li>✅ Powerful design tools</li>
+                        <li>✅ Abstract adds version control</li>
+                        <li>❌ Mac-only</li>
+                        <li>💰 $9/editor/month + Abstract costs</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Project Management & Planning</div>
+                <div class="stakeholder-input">
+                    <p><strong>Linear</strong> <span class="badge badge-green">Best for Dev Teams</span></p>
+                    <ul>
+                        <li>✅ Built for software teams</li>
+                        <li>✅ Keyboard shortcuts and speed</li>
+                        <li>✅ GitHub/GitLab integration</li>
+                        <li>✅ Clean, focused interface</li>
+                        <li>💰 $8/user/month</li>
+                    </ul>
+
+                    <p><strong>Jira</strong> <span class="badge badge-blue">Enterprise Standard</span></p>
+                    <ul>
+                        <li>✅ Highly customizable</li>
+                        <li>✅ Extensive reporting</li>
+                        <li>✅ Atlassian ecosystem integration</li>
+                        <li>⚠️ Steep learning curve</li>
+                        <li>💰 $7.75/user/month</li>
+                    </ul>
+
+                    <p><strong>Notion</strong> <span class="badge badge-purple">All-in-One</span></p>
+                    <ul>
+                        <li>✅ Docs, wikis, and project tracking combined</li>
+                        <li>✅ Flexible database views</li>
+                        <li>✅ Great for async collaboration</li>
+                        <li>⚠️ Not purpose-built for agile</li>
+                        <li>💰 $8/user/month</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Visual Collaboration & Whiteboarding</div>
+                <div class="stakeholder-input">
+                    <p><strong>Miro</strong> <span class="badge badge-green">Most Popular</span></p>
+                    <ul>
+                        <li>✅ Infinite canvas for brainstorming</li>
+                        <li>✅ Templates for workshops</li>
+                        <li>✅ Real-time cursors and collaboration</li>
+                        <li>✅ Integrations with Slack, Jira, etc.</li>
+                        <li>💰 $8/member/month</li>
+                    </ul>
+
+                    <p><strong>FigJam</strong> <span class="badge badge-blue">Figma Native</span></p>
+                    <ul>
+                        <li>✅ Seamless with Figma workflows</li>
+                        <li>✅ Built-in video chat</li>
+                        <li>✅ Simpler than Miro</li>
+                        <li>⚠️ Fewer templates</li>
+                        <li>💰 Free with Figma Professional</li>
+                    </ul>
+
+                    <p><strong>Excalidraw</strong></p>
+                    <ul>
+                        <li>✅ Completely free and open source</li>
+                        <li>✅ Hand-drawn aesthetic</li>
+                        <li>✅ No account required</li>
+                        <li>❌ Limited features vs. paid tools</li>
+                        <li>💰 Free</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💻 Development Tech Stack</h2>
+            
+            <div class="highlight">
+                <h3>Frontend Frameworks (2026)</h3>
+                <p><strong>React</strong> <span class="badge badge-green">Industry Standard</span></p>
+                <ul>
+                    <li>✅ Largest ecosystem and community</li>
+                    <li>✅ React Server Components for performance</li>
+                    <li>✅ React 19 with improved async handling</li>
+                    <li>🔧 Best with: Next.js, Vite, TypeScript</li>
+                </ul>
+
+                <p><strong>Vue 3</strong> <span class="badge badge-blue">Developer Favorite</span></p>
+                <ul>
+                    <li>✅ Gentle learning curve</li>
+                    <li>✅ Composition API is powerful</li>
+                    <li>✅ Excellent documentation</li>
+                    <li>🔧 Best with: Nuxt, Vite, Pinia</li>
+                </ul>
+
+                <p><strong>Svelte 5</strong> <span class="badge badge-purple">Rising Star</span></p>
+                <ul>
+                    <li>✅ Smallest bundle sizes</li>
+                    <li>✅ Runes make reactivity simple</li>
+                    <li>✅ No virtual DOM overhead</li>
+                    <li>🔧 Best with: SvelteKit, TypeScript</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Backend & API</h3>
+                <p><strong>Node.js + Express/Fastify</strong></p>
+                <ul>
+                    <li>✅ JavaScript everywhere</li>
+                    <li>✅ Massive npm ecosystem</li>
+                    <li>🔧 Pair with: PostgreSQL, Redis, JWT auth</li>
+                </ul>
+
+                <p><strong>Python + FastAPI</strong></p>
+                <ul>
+                    <li>✅ Auto-generated API documentation</li>
+                    <li>✅ Type hints and validation</li>
+                    <li>✅ Great for ML/data-heavy apps</li>
+                    <li>🔧 Pair with: PostgreSQL, Celery, Pydantic</li>
+                </ul>
+
+                <p><strong>Supabase</strong> <span class="badge badge-green">Best for Speed</span></p>
+                <ul>
+                    <li>✅ PostgreSQL + Auth + Storage + Realtime</li>
+                    <li>✅ Auto-generated REST & GraphQL APIs</li>
+                    <li>✅ 5 minutes to first API call</li>
+                    <li>💰 Free tier, $25/month Pro</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Database Choices</h3>
+                <p><strong>PostgreSQL</strong> - Relational, reliable, feature-rich</p>
+                <p><strong>MongoDB</strong> - Flexible schema, great for rapid prototyping</p>
+                <p><strong>Redis</strong> - Caching, session storage, real-time features</p>
+                <p><strong>Firebase Firestore</strong> - Real-time sync, minimal backend code</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔌 Integration Setup Guides</h2>
+            
+            <div class="decision-log">
+                <div class="decision-title">Slack Integration for Notifications</div>
+                <div class="decision-outcome">
+                    <p><strong>Use Case:</strong> Send deployment notifications, error alerts, user feedback to team channels</p>
+                    <p><strong>Setup Steps:</strong></p>
+                    <ol style="margin-left: 18px; margin-top: 6px;">
+                        <li>Create Slack App at api.slack.com/apps</li>
+                        <li>Add "Incoming Webhooks" under Features</li>
+                        <li>Activate and create webhook URL</li>
+                        <li>Store webhook URL in environment variables</li>
+                        <li>Send POST requests with JSON payload</li>
+                    </ol>
+                    <p style="margin-top: 6px;"><strong>Sample Code:</strong></p>
+                    <pre style="background: #0f172a; padding: 8px; border-radius: 4px; font-size: 0.7rem; overflow-x: auto; color: #10b981;">
+fetch(SLACK_WEBHOOK_URL, {
+  method: 'POST',
+  body: JSON.stringify({
+    text: '🚀 Deployed v2.1.0',
+    blocks: [{
+      type: 'section',
+      text: { type: 'mrkdwn', text: '*Deploy Success*\nVersion 2.1.0 live!' }
+    }]
+  })
+})</pre>
+                </div>
+            </div>
+
+            <div class="decision-log">
+                <div class="decision-title">GitHub Actions for CI/CD</div>
+                <div class="decision-outcome">
+                    <p><strong>Use Case:</strong> Automated testing, building, and deployment on every commit</p>
+                    <p><strong>Setup Steps:</strong></p>
+                    <ol style="margin-left: 18px; margin-top: 6px;">
+                        <li>Create .github/workflows/deploy.yml in your repo</li>
+                        <li>Define triggers (push, pull_request, schedule)</li>
+                        <li>Specify runner environment (ubuntu-latest)</li>
+                        <li>Add steps: checkout, install, test, build, deploy</li>
+                        <li>Add secrets in repo settings for API keys</li>
+                    </ol>
+                    <p style="margin-top: 6px;"><strong>Sample Workflow:</strong></p>
+                    <pre style="background: #0f172a; padding: 8px; border-radius: 4px; font-size: 0.7rem; overflow-x: auto; color: #10b981;">
+name: Deploy
+on: [push]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: npm run deploy</pre>
+                </div>
+            </div>
+
+            <div class="decision-log">
+                <div class="decision-title">Figma to Code (Automated)</div>
+                <div class="decision-outcome">
+                    <p><strong>Use Case:</strong> Convert Figma designs to React/Vue/HTML code automatically</p>
+                    <p><strong>Recommended Tools:</strong></p>
+                    <ul>
+                        <li><strong>Anima:</strong> Figma → React/Vue/HTML with responsive code</li>
+                        <li><strong>Builder.io:</strong> Visual editing with code export</li>
+                        <li><strong>Locofy:</strong> Figma → Production-ready code</li>
+                    </ul>
+                    <p style="margin-top: 6px;"><strong>Best Practice:</strong> Use generated code as starting point, not final product. Always review for accessibility and optimization.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🚀 Deployment & Hosting Options</h2>
+            
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value" style="font-size: 0.9rem;">Vercel</div>
+                    <div class="metric-label">Best for Next.js/React</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" style="font-size: 0.9rem;">Netlify</div>
+                    <div class="metric-label">Best for Static Sites</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" style="font-size: 0.9rem;">Railway</div>
+                    <div class="metric-label">Best for Full-Stack</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" style="font-size: 0.9rem;">Fly.io</div>
+                    <div class="metric-label">Best for Global Edge</div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 12px; color: #93c5fd; font-size: 0.85rem;">Quick Comparison</h3>
+            
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Vercel</div>
+                <div class="stakeholder-input">
+                    <p>✅ Zero-config deployments • ✅ Edge functions • ✅ Preview deployments per PR</p>
+                    <p>💰 Free: Hobby projects • $20/month: Pro (team collaboration)</p>
+                    <p><strong>Best for:</strong> Next.js, React, TypeScript apps</p>
+                </div>
+            </div>
+
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Netlify</div>
+                <div class="stakeholder-input">
+                    <p>✅ Form handling • ✅ Split testing • ✅ Serverless functions</p>
+                    <p>💰 Free: 100GB bandwidth • $19/month: Pro</p>
+                    <p><strong>Best for:</strong> JAMstack, static sites, Hugo/Jekyll</p>
+                </div>
+            </div>
+
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Railway</div>
+                <div class="stakeholder-input">
+                    <p>✅ Databases included • ✅ Cron jobs • ✅ Private networking</p>
+                    <p>💰 $5/month included usage • Pay-as-you-go after</p>
+                    <p><strong>Best for:</strong> Full-stack apps needing PostgreSQL/Redis</p>
+                </div>
+            </div>
+
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Cloudflare Pages</div>
+                <div class="stakeholder-input">
+                    <p>✅ Unlimited bandwidth • ✅ Global CDN • ✅ Workers integration</p>
+                    <p>💰 Free tier is very generous</p>
+                    <p><strong>Best for:</strong> Static sites needing global performance</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔐 Authentication & Security</h2>
+            
+            <div class="highlight">
+                <h3>Authentication Solutions</h3>
+                <p><strong>Auth0</strong> - Enterprise-grade, supports SSO, MFA</p>
+                <ul>
+                    <li>💰 Free: 7,500 active users • $35/month: Essential</li>
+                    <li>✅ Social login, passwordless, biometric</li>
+                </ul>
+
+                <p><strong>Clerk</strong> - Modern, developer-friendly</p>
+                <ul>
+                    <li>💰 Free: 10,000 MAU • $25/month: Pro</li>
+                    <li>✅ Pre-built UI components, user management</li>
+                </ul>
+
+                <p><strong>Supabase Auth</strong> - Open source, self-hostable</p>
+                <ul>
+                    <li>💰 Free tier included with Supabase</li>
+                    <li>✅ Row-level security, magic links, OAuth</li>
+                </ul>
+
+                <p><strong>NextAuth.js</strong> - Open source, Next.js native</p>
+                <ul>
+                    <li>💰 Completely free</li>
+                    <li>✅ Multiple providers, JWT, database sessions</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Security Best Practices</h3>
+                <ul>
+                    <li>✅ Use HTTPS everywhere (Let's Encrypt for free SSL)</li>
+                    <li>✅ Implement rate limiting (Redis + express-rate-limit)</li>
+                    <li>✅ Sanitize all user inputs (DOMPurify, validator.js)</li>
+                    <li>✅ Use environment variables for secrets (never commit .env)</li>
+                    <li>✅ Enable CORS properly (whitelist specific origins)</li>
+                    <li>✅ Add security headers (helmet.js for Express)</li>
+                    <li>✅ Regular dependency updates (Dependabot, Renovate)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Analytics & Monitoring</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item completed">
+                    <div class="timeline-date">User Analytics</div>
+                    <div class="timeline-content">
+                        <strong>PostHog</strong> - Open source, product analytics<br>
+                        <strong>Plausible</strong> - Privacy-focused, GDPR compliant<br>
+                        <strong>Mixpanel</strong> - Event tracking, funnels, retention
+                    </div>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Error Tracking</div>
+                    <div class="timeline-content">
+                        <strong>Sentry</strong> - Real-time error monitoring (Free: 5K events/mo)<br>
+                        <strong>LogRocket</strong> - Session replay + errors<br>
+                        <strong>Rollbar</strong> - Error tracking + deployment tracking
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Performance</div>
+                    <div class="timeline-content">
+                        <strong>Lighthouse CI</strong> - Automated performance testing<br>
+                        <strong>Web Vitals</strong> - Core metrics monitoring<br>
+                        <strong>New Relic</strong> - Full-stack observability
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>✅ Tool Selection Checklist</h2>
+            <div class="highlight">
+                <p><strong>Before choosing a tool, ask:</strong></p>
+                <ul>
+                    <li>□ Does it integrate with our existing stack?</li>
+                    <li>□ Can we migrate away if needed? (avoid lock-in)</li>
+                    <li>□ What's the learning curve for the team?</li>
+                    <li>□ Is there good documentation and community support?</li>
+                    <li>□ What's the total cost at our projected scale?</li>
+                    <li>□ Does it have the features we need for v1?</li>
+                    <li>□ Can it scale to v2, v3, and beyond?</li>
+                    <li>□ Is it actively maintained and updated?</li>
+                    <li>□ Do we have internal expertise or need training?</li>
+                    <li>□ What's the vendor's reputation and stability?</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Metrics & KPIs Dashboard Tab -->
+    <div class="tab-content" id="tab-8">
+        <div class="card">
+            <h2>📊 Metrics & KPIs Dashboard</h2>
+            <p>Comprehensive framework for measuring collaboration effectiveness, project health, and business outcomes.</p>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Key Performance Indicators</h2>
+            
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value">87%</div>
+                    <div class="metric-label">Stakeholder Alignment</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">2.1 days</div>
+                    <div class="metric-label">Avg Decision Time</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">15</div>
+                    <div class="metric-label">Iterations/Sprint</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">94%</div>
+                    <div class="metric-label">On-Time Delivery</div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>Collaboration Effectiveness Metrics</h3>
+                <p><strong>Stakeholder Alignment Score</strong></p>
+                <ul>
+                    <li><strong>How to Measure:</strong> Weekly survey asking "Are we building the right thing?" (1-10 scale)</li>
+                    <li><strong>Target:</strong> >8.0 average across all stakeholders</li>
+                    <li><strong>Red Flag:</strong> <6.5 or >2 point spread between stakeholders</li>
+                </ul>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 87%;">8.7/10</div>
+                </div>
+
+                <p><strong>Meeting Effectiveness</strong></p>
+                <ul>
+                    <li><strong>How to Measure:</strong> Post-meeting quick poll (Productive/Neutral/Waste)</li>
+                    <li><strong>Target:</strong> >80% "Productive" responses</li>
+                    <li><strong>Red Flag:</strong> >30% "Waste" responses</li>
+                </ul>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 92%;">92% Productive</div>
+                </div>
+
+                <p><strong>Response Time to Feedback</strong></p>
+                <ul>
+                    <li><strong>How to Measure:</strong> Time from feedback submission to acknowledgment</li>
+                    <li><strong>Target:</strong> <24 hours for acknowledgment, <1 week for resolution</li>
+                    <li><strong>Red Flag:</strong> >48 hours without response</li>
+                </ul>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 18%; background: linear-gradient(90deg, #10b981 0%, #059669 100%);">18 hours avg</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚡ Velocity & Throughput Metrics</h2>
+            
+            <div class="highlight">
+                <h3>Sprint Velocity</h3>
+                <p><strong>Story Points Completed per Sprint</strong></p>
+                <div class="timeline">
+                    <div class="timeline-item completed">
+                        <div class="timeline-date">Sprint 1</div>
+                        <div class="timeline-content">34 points (baseline)</div>
+                    </div>
+                    <div class="timeline-item completed">
+                        <div class="timeline-date">Sprint 2</div>
+                        <div class="timeline-content">38 points (+12%)</div>
+                    </div>
+                    <div class="timeline-item completed">
+                        <div class="timeline-date">Sprint 3</div>
+                        <div class="timeline-content">42 points (+24% from baseline)</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">Sprint 4</div>
+                        <div class="timeline-content">Target: 45 points</div>
+                    </div>
+                </div>
+                <p><span class="badge badge-green">Trend: Improving</span> <span class="badge badge-blue">Avg: 38 points</span></p>
+            </div>
+
+            <div class="highlight">
+                <h3>Cycle Time</h3>
+                <p><strong>Time from "In Progress" to "Done"</strong></p>
+                <ul>
+                    <li>Bug fixes: Avg 1.2 days (Target: <2 days) ✅</li>
+                    <li>Small features: Avg 3.5 days (Target: <5 days) ✅</li>
+                    <li>Medium features: Avg 8.2 days (Target: <10 days) ✅</li>
+                    <li>Large features: Avg 18 days (Target: <21 days) ✅</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Lead Time</h3>
+                <p><strong>Time from idea to production</strong></p>
+                <div class="decision-log">
+                    <div class="decision-title">Current Performance</div>
+                    <div class="decision-outcome">
+                        <p>Average: 23 days from backlog to production</p>
+                        <ul>
+                            <li>Ideation to design: 3 days</li>
+                            <li>Design to development: 2 days</li>
+                            <li>Development: 12 days</li>
+                            <li>QA/Testing: 4 days</li>
+                            <li>Deployment: 2 days</li>
+                        </ul>
+                        <p><strong>Bottleneck:</strong> Development phase - exploring pair programming to reduce</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>Deployment Frequency</h3>
+                <ul>
+                    <li>Current: 3.2 deploys/week</li>
+                    <li>Target: 5+ deploys/week (daily deployments)</li>
+                    <li>Last 30 days: 14 successful deployments, 1 rollback</li>
+                    <li><span class="badge badge-green">Success Rate: 93%</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💎 Quality Metrics</h2>
+            
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value">2.3%</div>
+                    <div class="metric-label">Defect Rate</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">85%</div>
+                    <div class="metric-label">Test Coverage</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">12%</div>
+                    <div class="metric-label">Rework Rate</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">4.8/5</div>
+                    <div class="metric-label">Code Review Score</div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>Defect Escape Rate</h3>
+                <p><strong>Bugs found in production vs. caught in testing</strong></p>
+                <ul>
+                    <li>Target: <5% of bugs escape to production</li>
+                    <li>Current: 2.3% (23 production bugs out of 1,000 total found)</li>
+                    <li><span class="badge badge-green">Exceeding Target</span></li>
+                </ul>
+
+                <h3>First-Time Fix Rate</h3>
+                <p><strong>% of issues resolved on first attempt</strong></p>
+                <ul>
+                    <li>Target: >70%</li>
+                    <li>Current: 78% (no rework needed)</li>
+                    <li>22% required iteration after initial fix</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Technical Debt Ratio</h3>
+                <p><strong>Time to fix tech debt vs. add features</strong></p>
+                <div class="progress-bar" style="height: 30px;">
+                    <div class="progress-fill" style="width: 15%; background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);">15% Tech Debt</div>
+                </div>
+                <p style="margin-top: 6px;">
+                    <span class="badge badge-orange">Current: 15%</span> 
+                    <span class="badge badge-blue">Target: <20%</span>
+                    <span class="badge badge-green">Status: Healthy</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>👥 User Satisfaction Metrics</h2>
+            
+            <div class="highlight">
+                <h3>Net Promoter Score (NPS)</h3>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <div class="metric-value">+52</div>
+                        <div class="metric-label">Overall NPS</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">68%</div>
+                        <div class="metric-label">Promoters (9-10)</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">16%</div>
+                        <div class="metric-label">Detractors (0-6)</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">16%</div>
+                        <div class="metric-label">Passives (7-8)</div>
+                    </div>
+                </div>
+                <p><strong>Survey Question:</strong> "How likely are you to recommend this tool to a colleague?" (0-10)</p>
+                <p><strong>Calculation:</strong> % Promoters - % Detractors = +52</p>
+                <p><span class="badge badge-green">Industry Benchmark: +30</span> <span class="badge badge-purple">We're Above Average!</span></p>
+            </div>
+
+            <div class="highlight">
+                <h3>Customer Satisfaction Score (CSAT)</h3>
+                <p><strong>Question:</strong> "How satisfied are you with this tool?" (1-5 scale)</p>
+                <ul>
+                    <li>5 stars: 58%</li>
+                    <li>4 stars: 28%</li>
+                    <li>3 stars: 10%</li>
+                    <li>2 stars: 3%</li>
+                    <li>1 star: 1%</li>
+                </ul>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 86%;">4.3/5 Average (86%)</div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>Task Success Rate</h3>
+                <p><strong>Can users complete their intended tasks?</strong></p>
+                <ul>
+                    <li>Add inventory item: 98% success</li>
+                    <li>Update stock levels: 96% success</li>
+                    <li>Generate report: 89% success ⚠️</li>
+                    <li>Set up alerts: 82% success ⚠️ <em>(needs improvement)</em></li>
+                </ul>
+                <p><strong>Action:</strong> Redesigning alert setup flow based on user testing feedback</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💰 Business Impact Metrics</h2>
+            
+            <div class="highlight">
+                <h3>Return on Investment (ROI)</h3>
+                <div class="decision-log">
+                    <div class="decision-title">Project ROI Calculation</div>
+                    <div class="decision-outcome">
+                        <p><strong>Investment:</strong></p>
+                        <ul>
+                            <li>Development team (3 months): $180,000</li>
+                            <li>Tools & infrastructure: $12,000</li>
+                            <li>Training & onboarding: $8,000</li>
+                            <li><strong>Total Investment: $200,000</strong></li>
+                        </ul>
+
+                        <p><strong>Returns (Annual):</strong></p>
+                        <ul>
+                            <li>Time saved: 4.2 hrs/day × 20 staff × $35/hr × 250 days = $735,000</li>
+                            <li>Reduced stock discrepancies: $48,000/year</li>
+                            <li>Prevented stockouts: $85,000/year</li>
+                            <li><strong>Total Annual Return: $868,000</strong></li>
+                        </ul>
+
+                        <p><strong>ROI = (868,000 - 200,000) / 200,000 = 334%</strong></p>
+                        <p><span class="badge badge-green">Payback Period: 2.8 months</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>Cost Avoidance</h3>
+                <ul>
+                    <li>Eliminated manual data entry errors: $42K/year</li>
+                    <li>Reduced overtime hours: $28K/year</li>
+                    <li>Prevented duplicate orders: $18K/year</li>
+                    <li>Faster incident resolution: $15K/year</li>
+                    <li><strong>Total Cost Avoidance: $103K annually</strong></li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Adoption & Engagement</h3>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <div class="metric-value">92%</div>
+                        <div class="metric-label">Daily Active Users</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">156</div>
+                        <div class="metric-label">Actions/User/Day</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">18 min</div>
+                        <div class="metric-label">Avg Session Length</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">98%</div>
+                        <div class="metric-label">Feature Adoption</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📈 Tracking & Reporting Best Practices</h2>
+            
+            <div class="highlight">
+                <h3>Dashboard Setup Recommendations</h3>
+                <ul>
+                    <li><strong>Real-time:</strong> Use tools like Grafana, Datadog, or Metabase</li>
+                    <li><strong>Automated Reports:</strong> Schedule weekly email summaries</li>
+                    <li><strong>Accessible:</strong> Public dashboards visible to all stakeholders</li>
+                    <li><strong>Actionable:</strong> Include "what to do" if metrics are red</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Review Cadence</h3>
+                <ul>
+                    <li><strong>Daily:</strong> Deployment success rate, error rates, active users</li>
+                    <li><strong>Weekly:</strong> Sprint velocity, cycle time, stakeholder alignment</li>
+                    <li><strong>Monthly:</strong> NPS, CSAT, ROI, technical debt ratio</li>
+                    <li><strong>Quarterly:</strong> Strategic KPIs, long-term trends, goal setting</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Red Flag Triggers</h3>
+                <p><strong>Immediate Action Required:</strong></p>
+                <ul>
+                    <li>⚠️ Stakeholder alignment drops below 6.5</li>
+                    <li>⚠️ >3 production incidents in one week</li>
+                    <li>⚠️ Velocity decreases >20% for 2 consecutive sprints</li>
+                    <li>⚠️ NPS turns negative</li>
+                    <li>⚠️ >40% of meetings rated "Waste"</li>
+                    <li>⚠️ Response time to feedback exceeds 48 hours</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Setting Effective KPIs</h2>
+            
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">SMART KPI Framework</div>
+                <div class="stakeholder-input">
+                    <p><strong>S - Specific:</strong> "Improve user satisfaction" → "Increase CSAT from 3.8 to 4.5"</p>
+                    <p><strong>M - Measurable:</strong> Use quantifiable metrics (%, days, count)</p>
+                    <p><strong>A - Achievable:</strong> Set realistic targets based on baseline</p>
+                    <p><strong>R - Relevant:</strong> Tie to business outcomes, not vanity metrics</p>
+                    <p><strong>T - Time-bound:</strong> "by end of Q2 2026"</p>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>Leading vs. Lagging Indicators</h3>
+                <p><strong>Leading Indicators</strong> (predict future success):</p>
+                <ul>
+                    <li>Code review thoroughness</li>
+                    <li>Test coverage percentage</li>
+                    <li>Stakeholder engagement in meetings</li>
+                    <li>Daily standup attendance</li>
+                </ul>
+
+                <p><strong>Lagging Indicators</strong> (measure past performance):</p>
+                <ul>
+                    <li>Defect rate in production</li>
+                    <li>Sprint velocity</li>
+                    <li>User satisfaction scores</li>
+                    <li>ROI calculations</li>
+                </ul>
+                <p><em>Balance both types for a complete picture!</em></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case Studies Tab -->
+    <div class="tab-content" id="tab-9">
+        <div class="card">
+            <h2>📚 Case Studies Library</h2>
+            <p>Real-world examples of collaborative automation design successes, challenges, and lessons learned.</p>
+        </div>
+
+        <div class="card">
+            <h2>✅ Success Story: Healthcare Patient Scheduling</h2>
+            
+            <div class="stakeholder-section">
+                <div class="stakeholder-card">
+                    <div class="stakeholder-name">Project Overview</div>
+                    <div class="stakeholder-role">Regional Hospital Network - 8 Locations</div>
+                    <div class="stakeholder-input">
+                        <p><strong>Challenge:</strong> Manual scheduling led to double-bookings, long wait times, and staff frustration</p>
+                        <p><strong>Timeline:</strong> 4 months from concept to full deployment</p>
+                        <p><strong>Team Size:</strong> 2 developers, 1 designer, 5 stakeholders</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>Collaboration Approach</h3>
+                <ul>
+                    <li><strong>Week 1-2:</strong> Shadowed nurses, schedulers, and patients. Discovered 80% of issues stemmed from unclear availability visibility</li>
+                    <li><strong>Week 3-4:</strong> Built clickable prototype with 3 navigation approaches. Users tested all three. Option B won with 92% preference</li>
+                    <li><strong>Week 5-10:</strong> 2-week sprints with end-of-sprint demos. Schedulers used the tool alongside old system</li>
+                    <li><strong>Week 11-14:</strong> Gradual rollout to 2 locations, then 4, then all 8</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Key Success Factors</h3>
+                <ul>
+                    <li>✅ Schedulers involved in EVERY design decision</li>
+                    <li>✅ Ran parallel systems for 2 weeks to build confidence</li>
+                    <li>✅ Created 15-minute training video instead of 2-hour session</li>
+                    <li>✅ Built "panic button" to revert to manual mode if needed</li>
+                </ul>
+            </div>
+
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value">-73%</div>
+                    <div class="metric-label">Double-Bookings</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">-45%</div>
+                    <div class="metric-label">Patient Wait Time</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">+38%</div>
+                    <div class="metric-label">Appointments/Day</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">$420K</div>
+                    <div class="metric-label">Annual Revenue Gain</div>
+                </div>
+            </div>
+
+            <div class="decision-log">
+                <div class="decision-title">Biggest Lesson Learned</div>
+                <div class="decision-outcome">
+                    <p>"We almost built a complex rules engine for scheduling priorities. After watching schedulers work, we realized they needed simple drag-and-drop. Saved 6 weeks of development."</p>
+                </div>
+                <div class="decision-rationale">— Lead Developer, Healthcare Project</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>✅ Success Story: E-commerce Inventory Automation</h2>
+            
+            <div class="stakeholder-section">
+                <div class="stakeholder-card">
+                    <div class="stakeholder-name">Project Overview</div>
+                    <div class="stakeholder-role">Mid-sized Online Retailer - 50K SKUs</div>
+                    <div class="stakeholder-input">
+                        <p><strong>Challenge:</strong> Manual reordering causing 12% stockout rate and $2M lost revenue annually</p>
+                        <p><strong>Timeline:</strong> 5 months end-to-end</p>
+                        <p><strong>Team Size:</strong> 3 developers, 1 data scientist, 1 UX designer, 4 stakeholders</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>Iterative Design Journey</h3>
+                <div class="timeline">
+                    <div class="timeline-item completed">
+                        <div class="timeline-date">Sprint 1-2</div>
+                        <div class="timeline-content">Built basic dashboard showing current stock levels. Users said "this is just a prettier spreadsheet"</div>
+                    </div>
+                    <div class="timeline-item completed">
+                        <div class="timeline-date">Sprint 3-4</div>
+                        <div class="timeline-content">Added predictive alerts based on sales velocity. Users loved it but asked "what should I order?"</div>
+                    </div>
+                    <div class="timeline-item completed">
+                        <div class="timeline-date">Sprint 5-6</div>
+                        <div class="timeline-content">Integrated with supplier catalog to show 1-click reorder suggestions. This was the "aha moment"</div>
+                    </div>
+                    <div class="timeline-item completed">
+                        <div class="timeline-date">Sprint 7-8</div>
+                        <div class="timeline-content">Added approval workflows for orders >$10K. Finance team requirement</div>
+                    </div>
+                    <div class="timeline-item completed">
+                        <div class="timeline-date">Sprint 9-10</div>
+                        <div class="timeline-content">Polish, performance optimization, mobile app for warehouse</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>Collaboration Wins</h3>
+                <ul>
+                    <li>✅ Weekly "order review" sessions where product manager walked through real scenarios</li>
+                    <li>✅ Slack channel where warehouse staff posted bugs/requests in real-time</li>
+                    <li>✅ Gave purchasing manager "super admin" access to tweak prediction algorithms</li>
+                    <li>✅ Invited supplier to design review (they improved their API based on our needs)</li>
+                </ul>
+            </div>
+
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value">-89%</div>
+                    <div class="metric-label">Stockouts</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">-35%</div>
+                    <div class="metric-label">Overstock</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">6.2 hrs</div>
+                    <div class="metric-label">Time Saved/Day</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">$1.8M</div>
+                    <div class="metric-label">Revenue Recovery</div>
+                </div>
+            </div>
+
+            <div class="decision-log">
+                <div class="decision-title">Critical Pivot</div>
+                <div class="decision-outcome">
+                    <p>"We were building a complex ML model for demand forecasting. After 3 sprints, accuracy was only 62%. A simple moving average with seasonality adjustments gave us 78% accuracy and took 2 days to implement."</p>
+                </div>
+                <div class="decision-rationale">— Data Scientist, E-commerce Project</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>❌ Failure Case Study: Financial Reporting Tool</h2>
+            
+            <div class="stakeholder-section">
+                <div class="stakeholder-card">
+                    <div class="stakeholder-name">Project Overview</div>
+                    <div class="stakeholder-role">Fortune 500 Finance Department</div>
+                    <div class="stakeholder-input">
+                        <p><strong>Challenge:</strong> Automate quarterly financial report generation</p>
+                        <p><strong>Timeline:</strong> 8 months (3 months over budget)</p>
+                        <p><strong>Outcome:</strong> Tool was delivered but abandoned after 2 months</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>What Went Wrong</h3>
+                <ul>
+                    <li>❌ Only met with CFO, not the analysts who would use it daily</li>
+                    <li>❌ Built features based on what executives *thought* analysts needed</li>
+                    <li>❌ No prototyping - went straight from requirements doc to code</li>
+                    <li>❌ First user testing happened 6 months into development</li>
+                    <li>❌ When users said "this doesn't work for us," response was "you'll adapt"</li>
+                    <li>❌ No training budget allocated - assumed tool was "intuitive"</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>The Aftermath</h3>
+                <p><strong>Cost:</strong> $680,000 invested, $0 ROI</p>
+                <p><strong>Impact:</strong> Analysts continued using Excel. Tool was decommissioned 8 months post-launch</p>
+                <p><strong>Team Morale:</strong> 2 developers left company citing "building things nobody uses"</p>
+            </div>
+
+            <div class="decision-log">
+                <div class="decision-title">Lessons Learned</div>
+                <div class="decision-outcome">
+                    <ul>
+                        <li>🎓 Build with end users, not for them</li>
+                        <li>🎓 Prototypes save months of wasted development</li>
+                        <li>🎓 "Intuitive" is subjective - always train and support users</li>
+                        <li>🎓 Executive buy-in ≠ user buy-in</li>
+                        <li>🎓 Sunk cost fallacy - we should have pivoted at month 3</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Redemption Arc</div>
+                <div class="stakeholder-input">
+                    <p>9 months later, the company tried again with a collaborative approach:</p>
+                    <ul>
+                        <li>✅ Started with 2-week discovery sprint with analysts</li>
+                        <li>✅ Built clickable prototype in week 3, tested with 8 users</li>
+                        <li>✅ Rolled out MVP in 6 weeks (vs. 8 months previous)</li>
+                        <li>✅ Adoption rate: 96% within 1 month</li>
+                        <li>✅ Cost: $85,000 (12% of original failed project)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Cross-Industry Insights</h2>
+            
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Manufacturing: Quality Control Automation</div>
+                <div class="stakeholder-input">
+                    <p><strong>Key Insight:</strong> Floor workers spotted issues computer vision missed</p>
+                    <p><strong>Solution:</strong> Hybrid system where AI flags potential issues, humans make final call</p>
+                    <p><strong>Result:</strong> 94% defect detection (vs 78% pure AI, 86% pure human)</p>
+                </div>
+            </div>
+
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Education: Course Enrollment System</div>
+                <div class="stakeholder-input">
+                    <p><strong>Key Insight:</strong> Students and administrators had completely different priorities</p>
+                    <p><strong>Solution:</strong> Two interfaces sharing same backend - student portal and admin dashboard</p>
+                    <p><strong>Result:</strong> Both groups rated satisfaction 9+/10</p>
+                </div>
+            </div>
+
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Retail: Employee Scheduling</div>
+                <div class="stakeholder-input">
+                    <p><strong>Key Insight:</strong> Managers wanted automation, employees wanted control</p>
+                    <p><strong>Solution:</strong> Auto-generated schedules with easy shift-swap marketplace</p>
+                    <p><strong>Result:</strong> 40% reduction in scheduling conflicts, 85% employee approval</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Pattern Recognition</h2>
+            
+            <div class="highlight">
+                <h3>What Successful Projects Have in Common</h3>
+                <ul>
+                    <li>✅ End users involved from day 1</li>
+                    <li>✅ Working prototype within first 3 weeks</li>
+                    <li>✅ Weekly (or more frequent) user feedback sessions</li>
+                    <li>✅ Clear definition of "done" agreed upon upfront</li>
+                    <li>✅ Training and change management budget allocated</li>
+                    <li>✅ Graceful degradation (system works even if features fail)</li>
+                    <li>✅ Escape hatch (users can revert to old process if needed)</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Common Failure Patterns</h3>
+                <ul>
+                    <li>❌ Building in isolation, big reveal at the end</li>
+                    <li>❌ "We know what users need better than they do"</li>
+                    <li>❌ Skipping user research to "save time"</li>
+                    <li>❌ Assuming adoption will happen automatically</li>
+                    <li>❌ No plan for measuring success post-launch</li>
+                    <li>❌ Treating feedback as nice-to-have vs. essential</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Onboarding Guide Tab -->
+    <div class="tab-content" id="tab-10">
+        <div class="card">
+            <h2>🚀 Onboarding Guide</h2>
+            <p>Complete guide to starting a new collaborative automation design project from day zero to first sprint.</p>
+        </div>
+
+        <div class="card">
+            <h2>📋 Pre-Project Checklist</h2>
+            
+            <div class="highlight">
+                <h3>Before You Begin</h3>
+                <ul>
+                    <li>□ Executive sponsor identified and committed</li>
+                    <li>□ Budget approved (development + tools + training)</li>
+                    <li>□ Team members allocated (not just "borrowed")</li>
+                    <li>□ Timeline expectations set realistically</li>
+                    <li>□ Success criteria defined and measurable</li>
+                    <li>□ Risk assessment completed</li>
+                    <li>□ Stakeholder list created (see below)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>👥 Stakeholder Identification Matrix</h2>
+            
+            <div class="stakeholder-section">
+                <h3 style="color: #c4b5fd; font-size: 0.85rem; margin-bottom: 8px;">Core Team Roles (Required)</h3>
+                
+                <div class="stakeholder-card">
+                    <div class="stakeholder-name">Product Owner / Business Lead</div>
+                    <div class="stakeholder-role">Decision Authority • Vision Keeper</div>
+                    <div class="stakeholder-input">
+                        <p><strong>Responsibilities:</strong></p>
+                        <ul>
+                            <li>Define business objectives and success metrics</li>
+                            <li>Prioritize features and make trade-off decisions</li>
+                            <li>Remove organizational blockers</li>
+                            <li>Secure resources and budget</li>
+                        </ul>
+                        <p><strong>Time Commitment:</strong> 5-10 hrs/week</p>
+                    </div>
+                </div>
+
+                <div class="stakeholder-card">
+                    <div class="stakeholder-name">End User Representatives (2-3 people)</div>
+                    <div class="stakeholder-role">Voice of Customer • Reality Check</div>
+                    <div class="stakeholder-input">
+                        <p><strong>Responsibilities:</strong></p>
+                        <ul>
+                            <li>Participate in user research and testing</li>
+                            <li>Provide feedback on prototypes and designs</li>
+                            <li>Validate features solve real problems</li>
+                            <li>Champion adoption among peers</li>
+                        </ul>
+                        <p><strong>Time Commitment:</strong> 3-5 hrs/week</p>
+                    </div>
+                </div>
+
+                <div class="stakeholder-card">
+                    <div class="stakeholder-name">Technical Lead / Architect</div>
+                    <div class="stakeholder-role">Feasibility Expert • Tech Strategy</div>
+                    <div class="stakeholder-input">
+                        <p><strong>Responsibilities:</strong></p>
+                        <ul>
+                            <li>Assess technical feasibility of requirements</li>
+                            <li>Design system architecture</li>
+                            <li>Guide technology stack decisions</li>
+                            <li>Identify technical risks early</li>
+                        </ul>
+                        <p><strong>Time Commitment:</strong> 10-15 hrs/week</p>
+                    </div>
+                </div>
+
+                <div class="stakeholder-card">
+                    <div class="stakeholder-name">UX Designer</div>
+                    <div class="stakeholder-role">User Experience • Interface Design</div>
+                    <div class="stakeholder-input">
+                        <p><strong>Responsibilities:</strong></p>
+                        <ul>
+                            <li>Conduct user research and usability testing</li>
+                            <li>Create wireframes, prototypes, and final designs</li>
+                            <li>Ensure accessibility and consistency</li>
+                            <li>Collaborate with developers on implementation</li>
+                        </ul>
+                        <p><strong>Time Commitment:</strong> 15-20 hrs/week</p>
+                    </div>
+                </div>
+
+                <div class="stakeholder-card">
+                    <div class="stakeholder-name">Development Team (2-4 developers)</div>
+                    <div class="stakeholder-role">Builders • Implementation</div>
+                    <div class="stakeholder-input">
+                        <p><strong>Responsibilities:</strong></p>
+                        <ul>
+                            <li>Write clean, maintainable code</li>
+                            <li>Participate in design discussions</li>
+                            <li>Estimate effort and identify technical constraints</li>
+                            <li>Conduct code reviews</li>
+                        </ul>
+                        <p><strong>Time Commitment:</strong> 30-40 hrs/week each</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stakeholder-section" style="margin-top: 12px;">
+                <h3 style="color: #c4b5fd; font-size: 0.85rem; margin-bottom: 8px;">Extended Team (As Needed)</h3>
+                
+                <div class="stakeholder-card">
+                    <div class="stakeholder-name">QA/Testing Specialist</div>
+                    <div class="stakeholder-input">Test strategy, quality assurance, bug verification</div>
+                </div>
+
+                <div class="stakeholder-card">
+                    <div class="stakeholder-name">Data Analyst / Scientist</div>
+                    <div class="stakeholder-input">Analytics requirements, reporting, ML models if needed</div>
+                </div>
+
+                <div class="stakeholder-card">
+                    <div class="stakeholder-name">Security Specialist</div>
+                    <div class="stakeholder-input">Security review, compliance requirements, penetration testing</div>
+                </div>
+
+                <div class="stakeholder-card">
+                    <div class="stakeholder-name">IT/Operations</div>
+                    <div class="stakeholder-input">Infrastructure, deployment, monitoring, support</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📅 First 30 Days Roadmap</h2>
+            
+            <div class="phase-tracker">
+                <div class="phase completed">
+                    <div class="phase-title">Week 1</div>
+                    <div class="phase-status">Discovery</div>
+                </div>
+                <div class="phase completed">
+                    <div class="phase-title">Week 2</div>
+                    <div class="phase-status">Alignment</div>
+                </div>
+                <div class="phase active">
+                    <div class="phase-title">Week 3</div>
+                    <div class="phase-status">Prototyping</div>
+                </div>
+                <div class="phase">
+                    <div class="phase-title">Week 4</div>
+                    <div class="phase-status">Planning</div>
+                </div>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Day 1-2: Kickoff Workshop</div>
+                    <div class="timeline-content">
+                        <strong>Agenda (4 hours):</strong><br>
+                        • Introductions and team building (30 min)<br>
+                        • Project vision and objectives (45 min)<br>
+                        • Paint the picture: "What does success look like in 6 months?" (60 min)<br>
+                        • Identify pain points and opportunities (60 min)<br>
+                        • Define success metrics (45 min)<br>
+                        <br><strong>Deliverable:</strong> One-page project charter
+                    </div>
+                </div>
+
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Day 3-5: User Research</div>
+                    <div class="timeline-content">
+                        <strong>Activities:</strong><br>
+                        • Conduct 5-8 stakeholder interviews (use template from Templates tab)<br>
+                        • Shadow end users in their environment<br>
+                        • Document current workflows and pain points<br>
+                        • Identify data sources and system integrations needed<br>
+                        <br><strong>Deliverable:</strong> Research summary with key insights
+                    </div>
+                </div>
+
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Day 8-10: Requirements Workshop</div>
+                    <div class="timeline-content">
+                        <strong>Activities:</strong><br>
+                        • Present research findings to full team<br>
+                        • Brainstorm solutions (use Silent Brainstorm method)<br>
+                        • Write user stories ("As a [role], I want [feature] so that [benefit]")<br>
+                        • Prioritize using MoSCoW method (Must/Should/Could/Won't have)<br>
+                        <br><strong>Deliverable:</strong> Prioritized backlog (30-50 user stories)
+                    </div>
+                </div>
+
+                <div class="timeline-item completed">
+                    <div class="timeline-date">Day 11-12: Alignment Check</div>
+                    <div class="timeline-content">
+                        <strong>Activities:</strong><br>
+                        • Review all work with executive sponsor<br>
+                        • Validate priorities and scope<br>
+                        • Get sign-off on MVP (minimum viable product) definition<br>
+                        • Confirm timeline and resource allocation<br>
+                        <br><strong>Deliverable:</strong> Approved project plan
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Day 15-19: Rapid Prototyping</div>
+                    <div class="timeline-content">
+                        <strong>Activities:</strong><br>
+                        • Designer creates low-fidelity wireframes<br>
+                        • Test wireframes with 3-5 end users<br>
+                        • Iterate based on feedback<br>
+                        • Create clickable prototype (Figma, Adobe XD)<br>
+                        <br><strong>Deliverable:</strong> Interactive prototype of core flows
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Day 22-24: Prototype Validation</div>
+                    <div class="timeline-content">
+                        <strong>Activities:</strong><br>
+                        • Usability testing with 6-8 users<br>
+                        • Observe users attempting key tasks<br>
+                        • Document confusion points and suggestions<br>
+                        • Refine prototype based on findings<br>
+                        <br><strong>Deliverable:</strong> Validated design ready for development
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Day 25-28: Sprint Planning</div>
+                    <div class="timeline-content">
+                        <strong>Activities:</strong><br>
+                        • Technical team estimates all user stories<br>
+                        • Define sprint length (recommend 2 weeks)<br>
+                        • Set up development environment and tools<br>
+                        • Plan first 3 sprints in detail<br>
+                        • Schedule recurring ceremonies (standup, review, retro)<br>
+                        <br><strong>Deliverable:</strong> Sprint 1 backlog with estimates
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Day 29-30: Sprint 0</div>
+                    <div class="timeline-content">
+                        <strong>Activities:</strong><br>
+                        • Set up CI/CD pipeline<br>
+                        • Configure development, staging, production environments<br>
+                        • Create project boilerplate and architecture<br>
+                        • Establish code standards and review process<br>
+                        • First team standup!<br>
+                        <br><strong>Deliverable:</strong> Ready to start Sprint 1 on Day 31
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🛠️ Tool Setup Checklist</h2>
+            
+            <div class="highlight">
+                <h3>Collaboration Tools</h3>
+                <ul>
+                    <li>□ <strong>Design:</strong> Figma workspace created, team added</li>
+                    <li>□ <strong>Project Management:</strong> Linear/Jira board set up with workflows</li>
+                    <li>□ <strong>Communication:</strong> Slack channel created (#project-name)</li>
+                    <li>□ <strong>Documentation:</strong> Notion/Confluence space initialized</li>
+                    <li>□ <strong>Whiteboarding:</strong> Miro board for workshops</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Development Tools</h3>
+                <ul>
+                    <li>□ <strong>Version Control:</strong> GitHub/GitLab repo created</li>
+                    <li>□ <strong>CI/CD:</strong> GitHub Actions or similar configured</li>
+                    <li>□ <strong>Hosting:</strong> Vercel/Netlify/Railway account set up</li>
+                    <li>□ <strong>Database:</strong> PostgreSQL/MongoDB instance provisioned</li>
+                    <li>□ <strong>Error Tracking:</strong> Sentry integrated</li>
+                    <li>□ <strong>Analytics:</strong> PostHog or similar installed</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Process & Ceremonies</h3>
+                <ul>
+                    <li>□ <strong>Daily Standup:</strong> Recurring calendar invite (15 min, same time daily)</li>
+                    <li>□ <strong>Sprint Planning:</strong> First day of sprint (2 hrs)</li>
+                    <li>□ <strong>Sprint Review/Demo:</strong> Last day of sprint (1 hr)</li>
+                    <li>□ <strong>Retrospective:</strong> After sprint review (1 hr)</li>
+                    <li>□ <strong>Design Reviews:</strong> Weekly (45 min)</li>
+                    <li>□ <strong>Office Hours:</strong> Open Q&A for stakeholders (2x/week, 30 min)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📝 Essential Documents Template</h2>
+            
+            <div class="decision-log">
+                <div class="decision-title">Project Charter (One-Pager)</div>
+                <div class="decision-outcome">
+                    <p><strong>Project Name:</strong> [Name]</p>
+                    <p><strong>Vision:</strong> [One sentence describing the future state]</p>
+                    <p><strong>Problem Statement:</strong> [What pain are we solving?]</p>
+                    <p><strong>Success Metrics:</strong></p>
+                    <ul>
+                        <li>[Metric 1]: Improve from [X] to [Y] by [date]</li>
+                        <li>[Metric 2]: Reduce [X] by [Y%] by [date]</li>
+                        <li>[Metric 3]: Increase [X] to [Y] by [date]</li>
+                    </ul>
+                    <p><strong>Scope (MVP):</strong> [What we're building in v1]</p>
+                    <p><strong>Out of Scope:</strong> [What we're explicitly NOT building]</p>
+                    <p><strong>Timeline:</strong> [Start date] to [Launch date]</p>
+                    <p><strong>Budget:</strong> $[Amount]</p>
+                    <p><strong>Team:</strong> [List core team members and roles]</p>
+                </div>
+            </div>
+
+            <div class="decision-log">
+                <div class="decision-title">Team Working Agreement</div>
+                <div class="decision-outcome">
+                    <p><strong>Communication Norms:</strong></p>
+                    <ul>
+                        <li>Response time: Slack messages within 4 hours during work hours</li>
+                        <li>Urgent issues: Use @channel or call directly</li>
+                        <li>Status updates: Post in #project-name by EOD</li>
+                    </ul>
+                    <p><strong>Meeting Expectations:</strong></p>
+                    <ul>
+                        <li>Cameras on for all meetings</li>
+                        <li>Be on time (meetings start at :02 to allow transition)</li>
+                        <li>Come prepared - read materials in advance</li>
+                    </ul>
+                    <p><strong>Decision-Making:</strong></p>
+                    <ul>
+                        <li>Product Owner makes final call on features/priorities</li>
+                        <li>Tech Lead makes final call on technical architecture</li>
+                        <li>Consensus preferred, but not required</li>
+                    </ul>
+                    <p><strong>Conflict Resolution:</strong></p>
+                    <ul>
+                        <li>Address issues early and directly</li>
+                        <li>Assume positive intent</li>
+                        <li>Escalate to project sponsor if unresolved after 2 discussions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Role-Specific Onboarding</h2>
+            
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">New Product Owner? Start Here</div>
+                <div class="stakeholder-input">
+                    <p><strong>Week 1 Priorities:</strong></p>
+                    <ul>
+                        <li>✅ Meet 1-on-1 with each team member</li>
+                        <li>✅ Review all user research and pain points</li>
+                        <li>✅ Draft initial vision statement</li>
+                        <li>✅ Identify top 3 success metrics</li>
+                    </ul>
+                    <p><strong>Resources to Read:</strong></p>
+                    <ul>
+                        <li>📚 "Inspired" by Marty Cagan (product management)</li>
+                        <li>📄 Best Practices tab in this app</li>
+                        <li>📄 Templates tab for stakeholder interviews</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">New Developer? Start Here</div>
+                <div class="stakeholder-input">
+                    <p><strong>Week 1 Priorities:</strong></p>
+                    <ul>
+                        <li>✅ Set up dev environment (follow README)</li>
+                        <li>✅ Review tech stack and architecture docs</li>
+                        <li>✅ Deploy "Hello World" change to staging</li>
+                        <li>✅ Pair program with senior dev on small task</li>
+                    </ul>
+                    <p><strong>Resources to Review:</strong></p>
+                    <ul>
+                        <li>🔧 Tools & Tech Stack tab in this app</li>
+                        <li>📂 GitHub repo wiki for setup instructions</li>
+                        <li>👥 Slack #dev-help channel for questions</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">New Designer? Start Here</div>
+                <div class="stakeholder-input">
+                    <p><strong>Week 1 Priorities:</strong></p>
+                    <ul>
+                        <li>✅ Review user research findings</li>
+                        <li>✅ Shadow 2-3 end users</li>
+                        <li>✅ Review existing design system (if any)</li>
+                        <li>✅ Set up Figma workspace access</li>
+                    </ul>
+                    <p><strong>Resources to Review:</strong></p>
+                    <ul>
+                        <li>🎨 Existing wireframes and prototypes</li>
+                        <li>📋 User personas and journey maps</li>
+                        <li>📊 Analytics on current system (if available)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚠️ Common First-Month Pitfalls</h2>
+            
+            <div class="highlight">
+                <ul>
+                    <li>❌ <strong>Analysis Paralysis:</strong> Spending 6 weeks on perfect requirements. Instead: Get 80% clarity, start building, iterate.</li>
+                    <li>❌ <strong>Tool Overload:</strong> Adding 15 new tools. Instead: Start with 3-4 core tools, add more only if needed.</li>
+                    <li>❌ <strong>Scope Creep Day 1:</strong> "While we're at it, let's also..." Instead: Park good ideas in "v2 backlog."</li>
+                    <li>❌ <strong>Skipping Prototypes:</strong> "We'll just build it right the first time." Instead: Always prototype and test first.</li>
+                    <li>❌ <strong>No Clear Definition of Done:</strong> "We'll know it when we see it." Instead: Write explicit acceptance criteria.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>✅ First Month Success Checklist</h2>
+            
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value">✓</div>
+                    <div class="metric-label">Team Aligned</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">✓</div>
+                    <div class="metric-label">Tools Set Up</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">✓</div>
+                    <div class="metric-label">Prototype Tested</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">✓</div>
+                    <div class="metric-label">Sprint 1 Started</div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>By Day 30, You Should Have:</h3>
+                <ul>
+                    <li>□ One-page project charter signed by all stakeholders</li>
+                    <li>□ 5+ stakeholder interviews completed</li>
+                    <li>□ Prioritized backlog of 30-50 user stories</li>
+                    <li>□ Clickable prototype of core user flows</li>
+                    <li>□ Prototype tested with 6+ end users</li>
+                    <li>□ Development environment fully set up</li>
+                    <li>□ First sprint planned and started</li>
+                    <li>□ All team ceremonies scheduled</li>
+                    <li>□ Communication channels established</li>
+                    <li>□ Everyone knows their role and responsibilities</li>
+                </ul>
+                <p><strong>If you have all these, you're set up for success! 🎉</strong></p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🆘 When You Need Help</h2>
+            
+            <div class="stakeholder-card">
+                <div class="stakeholder-name">Escalation Path</div>
+                <div class="stakeholder-input">
+                    <p><strong>Level 1 - Team Discussion:</strong> Bring issue to daily standup or design review</p>
+                    <p><strong>Level 2 - Product Owner:</strong> If affecting scope, timeline, or priorities</p>
+                    <p><strong>Level 3 - Executive Sponsor:</strong> If requiring organizational change or budget adjustment</p>
+                    <p><strong>Level 4 - External Expert:</strong> Consider bringing in consultant for specific expertise</p>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>Red Flags Requiring Immediate Attention</h3>
+                <ul>
+                    <li>🚩 Stakeholders disagree on fundamental vision after week 2</li>
+                    <li>🚩 End users reject prototype with >50% negative feedback</li>
+                    <li>🚩 Technical feasibility concerns not raised until week 3+</li>
+                    <li>🚩 Team member working >50 hrs/week consistently</li>
+                    <li>🚩 Missing >30% of planned meetings</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab(0)">
+            <div class="nav-icon">🏠</div>
+            <div>Overview</div>
+        </div>
+        <div class="nav-item" onclick="switchTab(1)">
+            <div class="nav-icon">⚙️</div>
+            <div>Process</div>
+        </div>
+        <div class="nav-item" onclick="switchTab(2)">
+            <div class="nav-icon">👥</div>
+            <div>Team</div>
+        </div>
+        <div class="nav-item" onclick="switchTab(3)">
+            <div class="nav-icon">📅</div>
+            <div>Timeline</div>
+        </div>
+        <div class="nav-item" onclick="switchTab(4)">
+            <div class="nav-icon">🛠️</div>
+            <div>Demo</div>
+        </div>
+        <div class="nav-item" onclick="switchTab(5)">
+            <div class="nav-icon">✨</div>
+            <div>Practices</div>
+        </div>
+        <div class="nav-item" onclick="switchTab(6)">
+            <div class="nav-icon">📝</div>
+            <div>Templates</div>
+        </div>
+        <div class="nav-item" onclick="switchTab(7)">
+            <div class="nav-icon">🔧</div>
+            <div>Tools</div>
+        </div>
+        <div class="nav-item" onclick="switchTab(8)">
+            <div class="nav-icon">📊</div>
+            <div>Metrics</div>
+        </div>
+        <div class="nav-item" onclick="switchTab(9)">
+            <div class="nav-icon">📚</div>
+            <div>Cases</div>
+        </div>
+        <div class="nav-item" onclick="switchTab(10)">
+            <div class="nav-icon">🚀</div>
+            <div>Onboard</div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabIndex) {
+            // Update tab buttons
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach((tab, index) => {
+                if (index === tabIndex) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            // Update tab content
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach((content, index) => {
+                if (index === tabIndex) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+
+            // Update bottom navigation
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach((item, index) => {
+                if (index === tabIndex) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function runSimulation(type) {
+            const output = document.getElementById('sim-output');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            let result = '';
+            
+            if (type === 'scan') {
+                result = `
+[${timestamp}] SCANNING ITEM...
+> Barcode detected: 8906001326019
+> Querying database...
+> Item found: "Premium Coffee Beans - 1kg"
+> Current stock: 47 units
+> Location: Warehouse A, Aisle 3, Shelf B
+> Last updated: 2 hours ago
+> Status: ✓ Stock level healthy
+> Action: No reorder needed
+                `.trim();
+            } else if (type === 'update') {
+                result = `
+[${timestamp}] UPDATING STOCK LEVEL...
+> Item: Premium Coffee Beans - 1kg
+> Previous: 47 units
+> Adjustment: -12 units (Sale order #S2026-0421)
+> New total: 35 units
+> Syncing to cloud...
+> ✓ Update successful
+> Alert check: 35 > 30 (reorder threshold) ✓
+> Notification: None required
+                `.trim();
+            } else if (type === 'alert') {
+                result = `
+[${timestamp}] CHECKING ALERTS...
+> Scanning all inventory items...
+> Found 3 items below threshold:
+
+⚠️ ALERT #1
+  Item: Organic Olive Oil 500ml
+  Current: 8 units | Threshold: 15 units
+  Recommended action: Order 50 units
+  
+⚠️ ALERT #2
+  Item: Artisan Pasta Mix
+  Current: 3 units | Threshold: 10 units
+  Recommended action: Order 30 units (URGENT)
+  
+⚠️ ALERT #3
+  Item: Himalayan Pink Salt
+  Current: 12 units | Threshold: 20 units
+  Recommended action: Order 40 units
+
+> Notifications sent to procurement team
+> Next check: In 6 hours
+                `.trim();
+            }
+            
+            output.innerHTML = `<div style="color: #10b981;">${result.replace(/\n/g, '<br>')}</div>`;
+        }
+
+        // Auto-update metrics simulation
+        setInterval(() => {
+            const metrics = document.querySelectorAll('.metric-value');
+            if (metrics.length > 0 && Math.random() > 0.7) {
+                const randomMetric = metrics[Math.floor(Math.random() * metrics.length)];
+                const currentValue = parseInt(randomMetric.textContent);
+                if (!isNaN(currentValue)) {
+                    const change = Math.random() > 0.5 ? 1 : -1;
+                    randomMetric.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        randomMetric.style.transform = 'scale(1)';
+                    }, 200);
+                }
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

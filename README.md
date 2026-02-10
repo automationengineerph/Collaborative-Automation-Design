@@ -1,4 +1,4 @@
-# -Collaborative-Automation-Design
+# Collaborative-Automation-Design
 comprehensive HTML mobile app for 2026 Collaborative Automation Design with these key features:
 App Highlights:
 
